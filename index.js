@@ -29,3 +29,61 @@ const data = [
     ],
   },
 ];
+
+const game = document.querySelector('.game');
+const result = document.querySelector('.result');
+const question = document.querySelector('.question');
+const answers = document.querySelector('.answers');
+const submit = document.querySelector('.submitbutton');
+const play = document.querySelector('.playagainbutton');
+
+let qIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let total = 0;
+let selectedAnswer;
+
+const showResultScreen = () => {
+  result.style.display = 'block';
+  game.style.display = 'none';
+};
+
+const showDetails = (qIndex) => {
+  if (qIndex === data.length) return showResultScreen;
+  selectedAnswer = null;
+  question.innerHTML = `<h2>
+  ${data[qIndex].question}
+  </h2>`;
+  answers.innerHTML = data[qIndex].answers
+    .map(
+      (item, i) =>
+        `<div class="answer">
+  <input type="radio" name="answer" id="${i}" value="${item.isCorrect}"/>
+  <label for="${i}">${item.answer}</label>
+</div>`
+    )
+    .join('');
+};
+
+const clickedAnswer = () => {
+  answers.querySelectorAll('input').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      selectedAnswer = e.target.value;
+    });
+  });
+};
+
+const submitAnswer = () => {
+  submit.addEventListener('click', () => {
+    if (selectedAnswer !== null) {
+      selectedAnswer === 'true' ? correctCount++ : wrongCount++;
+      qIndex++;
+      showDetails(qIndex);
+    } else alert('You have not selected a answer');
+    console.log('selectedanswer', selectedAnswer);
+  });
+};
+
+showDetails(qIndex);
+submitAnswer();
+clickedAnswer();
