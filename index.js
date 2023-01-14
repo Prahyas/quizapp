@@ -26,6 +26,7 @@ const data = [
       { answer: 'bats', isCorrect: false },
       { answer: 'vultures', isCorrect: true },
       { answer: 'ants', isCorrect: false },
+      { answer: 'camels', isCorrect: false },
     ],
   },
 ];
@@ -40,16 +41,21 @@ const play = document.querySelector('.playagainbutton');
 let qIndex = 0;
 let correctCount = 0;
 let wrongCount = 0;
-let total = 0;
 let selectedAnswer;
 
 const showResultScreen = () => {
   result.style.display = 'block';
   game.style.display = 'none';
+
+  result.querySelector(
+    '.correct'
+  ).textContent = `Correct Answer : ${correctCount}`;
+  result.querySelector('.wrong').textContent = `Wrong Answer : ${wrongCount}`;
+  result.querySelector('.score').textContent = `Score : ${correctCount * 10}`;
 };
 
 const showDetails = (qIndex) => {
-  if (qIndex === data.length) return showResultScreen;
+  if (qIndex === data.length) return showResultScreen();
   selectedAnswer = null;
   question.innerHTML = `<h2>
   ${data[qIndex].question}
@@ -63,6 +69,7 @@ const showDetails = (qIndex) => {
 </div>`
     )
     .join('');
+  clickedAnswer();
 };
 
 const clickedAnswer = () => {
@@ -80,9 +87,21 @@ const submitAnswer = () => {
       qIndex++;
       showDetails(qIndex);
     } else alert('You have not selected a answer');
-    console.log('selectedanswer', selectedAnswer);
   });
 };
+
+const playAgain = () => {
+  qIndex = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  showDetails(qIndex);
+};
+
+play.addEventListener('click', () => {
+  result.style.display = 'none';
+  game.style.display = 'block';
+  playAgain();
+});
 
 showDetails(qIndex);
 submitAnswer();
